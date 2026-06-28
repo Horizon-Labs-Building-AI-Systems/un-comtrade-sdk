@@ -15,7 +15,7 @@ Created
 2026-06-26T20:51:32Z
 
 Last Updated
-2026-06-29T00:10:00Z
+2026-06-29T03:50:00Z
 
 Author
 Codex
@@ -7521,6 +7521,487 @@ recorded in chronological order.
   F-004 regression guards; 1 expected skip on
   `importlib.metadata` because the package is
   not import-installed in dev mode).
+
+---
+
+## CHG-0083 — C-001 CLI Foundation
+
+- **Date.** 2026-06-29T02:40:00Z.
+- **Type.** Feature.
+- **Title.** Phase 7 CLI foundation
+  (`un-comtrade` console script + `un_comtrade.cli`
+  package).
+- **Scope.** New `un_comtrade/cli/` package +
+  `tests/test_cli_foundation.py` + entry-point
+  registration in `pyproject.toml`. Zero business
+  commands (deferred to P7-002+).
+- **Motivation.** Per
+  `031_PRODUCTION_READINESS.md` §9 ("Recommendation
+  to begin CLI") and
+  `IMPLEMENTATION_BASELINE_v1.md` §7 ("Application
+  layer — CLI is the first consumer of the
+  stabilised public API surface"), the CLI is the
+  natural first post-freeze work item. C-001
+  establishes the foundation before any business
+  command lands.
+- **Resolution.**
+  1. New package `un_comtrade/cli/`:
+     - `__init__.py` (top-level facade).
+     - `main.py` (argparse parser + `main(argv)`
+       entry + global options + exit-code
+       mapping).
+     - `commands/` (subcommand registry;
+       foundation ships the `root` default
+       command only).
+     - `formatting/` (JSON formatter functional;
+       TABLE and CSV formatters are
+       placeholders for P7-002+).
+     - `utils/` (exit-code constants,
+       configuration loader, CLI exception
+       hierarchy).
+  2. Public-API-only constraint enforced via an
+     AST walker in `test_cli_foundation.py`
+     that fails on any `import` of a private
+     `un_comtrade._*` module.
+  3. Console-script entry point registered in
+     `pyproject.toml [project.scripts]`:
+     `un-comtrade = "un_comtrade.cli.main:main"`.
+- **Public API Impact.** None on the SDK. New
+  CLI package surface:
+  - `un_comtrade.cli.main.build_parser`
+  - `un_comtrade.cli.main.main`
+  - 6 exit-code constants
+  - `CLIError` / `CLIConfigurationError`
+  - `load_cli_configuration`
+  - 3 formatters (`JsonFormatter`,
+    `TableFormatter`, `CsvFormatter`)
+- **Breaking Change.** No.
+- **Verification Status.** Verified — 2857 /
+  2857 SDK tests pass (2812 baseline + 45 new
+  C-001 tests; 3 expected skips: 1
+  `importlib.metadata` + 2 console-script
+  subprocess checks that require `pip install`
+  on PATH).
+- **Smoke tests (manual).**
+  - `python -m un_comtrade.cli.main --version`
+    → `un-comtrade 1.0.1 (un-comtrade-sdk 1.0.1)`
+  - `python -m un_comtrade.cli.main --help`
+    → root help banner with all 4 global
+    options.
+  - `python -m un_comtrade.cli.main` →
+    banner + exit 0.
+
+---
+
+## CHG-0084 — C-002 Metadata Commands
+
+- **Date.** 2026-06-29T02:55:00Z.
+- **Type.** Feature.
+- **Title.** `metadata` subcommand family —
+  6 reference-catalogue commands via the
+  public `MetadataService` API.
+- **Scope.** New `un_comtrade/cli/commands/metadata.py`
+  module + functional `TableFormatter` +
+  `CsvFormatter` (C-001 placeholders promoted) +
+  `--output PATH` global flag + 21 new tests.
+- **Motivation.** P7-002 is the first
+  business-command phase after the CLI
+  foundation (P7-001 / C-001). The six
+  reference-catalogue commands are the simplest
+  end-to-end exercise of the public
+  `MetadataService` API and validate the CLI's
+  consumption of frozen SDK surface.
+- **Resolution.**
+  1. New commands (each mapped 1:1 to a public
+     `MetadataService` method):
+     - `metadata countries` →
+       `MetadataService.get_countries()`
+     - `metadata partners` →
+       `MetadataService.get_partners()`
+     - `metadata classifications` →
+       `MetadataService.get_classifications()`
+     - `metadata frequencies` →
+       `MetadataService.get_frequencies()`
+     - `metadata transport-modes` →
+       `MetadataService.get_transport_modes()`
+     - `metadata hs [--edition EDITION]` →
+       `MetadataService.get_hs_codes(edition)`
+  2. `--output PATH` global flag added to the
+     root parser + propagated to every
+     sub-subparser (argparse does not propagate
+     parent options across sub-subparser
+     boundaries).
+  3. `TableFormatter` and `CsvFormatter`
+     promoted from placeholders to full
+     implementations: aligned text columns
+     and RFC 4180 CSV respectively.
+  4. New shared helper module
+     `un_comtrade/cli/formatting/_records.py`
+     (private) with row-dict normalisation
+     utilities.
+  5. `main.py` now distinguishes
+     `CLIConfigurationError` → `EXIT_CONFIG_ERROR`
+     (78) from generic `CLIError` →
+     `EXIT_USER_ERROR` (2).
+- **Public API Impact.** None on the SDK. CLI
+  surface gains the `metadata` outer command
+  with 6 sub-subcommands and the `--output`
+  global flag.
+- **Breaking Change.** No.
+- **Verification Status.** Verified — 2878 /
+  2878 SDK tests pass (2857 baseline + 21 new
+  C-002 tests; 3 expected skips). Public-SDK-
+  only constraint enforced by an AST walker in
+  `tests/test_cli_metadata.py::TestMetadataCommandPublicSDKOnly`.
+
+---
+
+## CHG-0085 — C-003 Trade Commands
+
+- **Date.** 2026-06-29T03:10:00Z.
+- **Type.** Feature.
+- **Title.** `trade` subcommand family —
+  6 trade-data commands via the public
+  `TradeService` API.
+- **Scope.** New `un_comtrade/cli/commands/trade.py`
+  module + `un_comtrade/cli/utils/progress.py`
+  (TTY-aware progress reporter) + `--progress`
+  flag + 34 new tests.
+- **Motivation.** C-003 ships the second
+  business-command family. The trade commands
+  exercise the full upstream-data path (URL
+  assembly, request signing, transport, parsing)
+  end-to-end through the public
+  `TradeService` API. The CLI delegates **all**
+  of that work to the SDK; it never builds
+  upstream URLs.
+- **Resolution.**
+  1. New commands (each mapped 1:1 to a public
+     `TradeService` method):
+     - `trade exports` →
+       `TradeService.get_exports`
+     - `trade imports` →
+       `TradeService.get_imports`
+     - `trade world` →
+       `TradeService.get_world_trade` (no
+       `--partner` accepted)
+     - `trade bilateral --flow {X,M}` →
+       `TradeService.get_bilateral`
+     - `trade balance` →
+       `TradeService.get_trade_balance`
+     - `trade tariffline --flow {X,M}` →
+       `TradeService.get_tariffline`
+  2. CLI options:
+     - `--reporter` (required; int) →
+       `reporter_code`
+     - `--year` / `--period` (required; string)
+       → `period`
+     - `--partner` (optional; int) →
+       `partner_code`
+     - `--frequency` (optional; A | M)
+     - `--classification` (optional) →
+       `classification`
+     - `--commodity` (optional) →
+       `commodity_code`
+     - `--edition` (optional) → `edition`
+     - `--max-records` (optional; int) →
+       `max_records`
+     - `--breakdown-mode` (optional) →
+       `breakdown_mode`
+     - `--flow` (bilateral / tariffline only)
+     - `--progress` (writes to stderr, TTY-
+       aware)
+  3. `TradeResponse.to_dict()` is the public
+     serialisation boundary — the CLI never
+     reaches into private fields.
+- **Public API Impact.** None on the SDK. CLI
+  surface gains the `trade` outer command with
+  6 sub-subcommands and the `--progress` flag.
+- **Breaking Change.** No.
+- **Verification Status.** Verified — 2912 /
+  2912 SDK tests pass (2878 baseline + 34 new
+  C-003 tests; 3 expected skips). The
+  "URL never built inside CLI" constraint is
+  enforced by an AST + regex guard in
+  `tests/test_cli_trade.py::TestURLNotBuiltInsideCLI`.
+
+---
+
+## CHG-0086 — C-004 Analytics Commands
+
+- **Date.** 2026-06-29T03:20:00Z.
+- **Type.** Feature.
+- **Title.** `analytics` subcommand family —
+  6 outer commands exposing the public
+  `un_comtrade.analytics` API.
+- **Scope.** New `un_comtrade/cli/commands/analytics.py`
+  module + `un_comtrade/cli/utils/dataset_loader.py`
+  (file-extension-based dataset loader via
+  `StorageRegistry`) + 24 new tests.
+- **Motivation.** C-004 ships the third
+  business-command family. Analytics commands
+  operate on a previously-stored
+  `CanonicalDataset`; the CLI loads the dataset
+  via the public Storage layer and dispatches to
+  the corresponding public analytics function.
+  No analytics logic lives in the CLI.
+- **Resolution.**
+  1. New commands (each loads a stored dataset
+     and delegates to one public analytics
+     function):
+     - `analytics country --reporter CODE` →
+       `country.country_summary`
+     - `analytics partner --reporter CODE` →
+       `partner.top_partners`
+     - `analytics commodity [--reporter CODE]` →
+       `commodity.top_hs_codes`
+     - `analytics trend [--reporter CODE]` →
+       `timeseries.annual_trend`
+     - `analytics balance [--reporter CODE]` →
+       `balance.country_balance`
+     - `analytics compare --reporter C1 C2` →
+       `compare.country_vs_country`
+  2. CLI options:
+     - `--dataset PATH` (required; auto-detects
+       format from file extension or directory
+       contents)
+     - `--reporter CODE` (int)
+     - `--partner CODE` (int)
+     - `--flow {X,M}`
+     - `--limit N`
+     - `--breakdown-by {commodity,partner,period}`
+     - Global `--output-format` / `--output`
+  3. `dataset_loader` helper detects file
+     extensions (.csv / .json / .parquet / .duckdb)
+     and dispatches to the corresponding
+     `Storage` backend via the public
+     `StorageRegistry`. Handles single-file and
+     directory layouts (Parquet stores into a
+     directory).
+  4. CLI kwargs mapping: `--reporter` →
+     `reporter_code`, `--reporters` →
+     `reporter_codes`, `--partner` →
+     `partner_code`. Configurable via
+     `param_name` per command.
+- **Public API Impact.** None on the SDK. CLI
+  surface gains the `analytics` outer command
+  with 6 sub-subcommands.
+- **Breaking Change.** No.
+- **Verification Status.** Verified — 2936 /
+  2936 SDK tests pass (2912 baseline + 24 new
+  C-004 tests; 3 expected skips). The
+  "No analytics logic exists inside CLI"
+  constraint is enforced by an AST + regex
+  guard in
+  `tests/test_cli_analytics.py::TestNoAnalyticsLogicInsideCLI`.
+
+---
+
+## CHG-0087 — C-005 Storage & ETL Commands
+
+- **Date.** 2026-06-29T03:35:00Z.
+- **Type.** Feature.
+- **Title.** `storage` + `etl` subcommand
+  families — orchestration-only thin wrappers
+  over the public Storage and ETL APIs.
+- **Scope.** New
+  `un_comtrade/cli/commands/storage.py` +
+  `un_comtrade/cli/commands/etl.py` modules +
+  20 new tests.
+- **Motivation.** C-005 closes the CLI surface
+  by exposing the last two SDK families: the
+  Storage layer (4 write subcommands) and the
+  ETL pipeline runner. The CLI performs
+  orchestration only — it does not implement
+  any storage format or pipeline stage.
+- **Resolution.**
+  1. Storage commands (each loads a dataset
+     via `load_dataset(...)` and delegates to
+     the corresponding public writer):
+     - `storage parquet` →
+       `ParquetWriter.store(dataset, config)`
+     - `storage csv` →
+       `CSVWriter.store(dataset, config)`
+     - `storage json` →
+       `JSONWriter.store(dataset, config)`
+     - `storage duckdb` →
+       `DuckDBWriter.store(dataset, config)`
+  2. `etl run --pipeline-config PATH
+     [--source JSON]` builds a public
+     `ETLPipeline(name, stages)` from a JSON
+     config and calls `ETLPipeline.run(source)`.
+     Stage factories are imported by dotted
+     path (`module.path:callable`); the CLI
+     never hard-codes any stage logic.
+  3. CLI options:
+     - `storage <fmt>`: `--dataset`, `--output-path`,
+       `--overwrite`, `--table-name` (DuckDB).
+     - `etl run`: `--pipeline-config`,
+       `--source` (optional JSON literal).
+- **Public API Impact.** None on the SDK. CLI
+  surface gains `storage` + `etl` outer
+  commands.
+- **Breaking Change.** No.
+- **Verification Status.** Verified — 2956 /
+  2956 SDK tests pass (2936 baseline + 20 new
+  C-005 tests; 3 expected skips). The
+  "CLI performs orchestration only"
+  constraint is enforced by an AST + regex
+  guard in
+  `tests/test_cli_storage.py::TestOrchestrationOnly`
+  that fails on any storage implementation
+  keyword (`pyarrow.Table`, `duckdb.connect`,
+  `.to_pylist`, `.write_parquet`, raw
+  `open("wb"...)`, `Path.write_text`).
+
+---
+
+## CHG-0088 — C-006 Output Formatting
+
+- **Date.** 2026-06-29T03:50:00Z.
+- **Type.** Refactor + Feature.
+- **Title.** Formatter package restructured;
+  added Markdown and Plain-Text formatters.
+- **Scope.** `un_comtrade/cli/formatting/`
+  package restructure + 2 new formatters
+  (markdown, text) + 61 new tests.
+- **Motivation.** C-006 closes the CLI
+  formatting layer. The five formatters
+  (`json`, `table`, `csv`, `markdown`, `text`)
+  live as separate files under
+  `un_comtrade/cli/formatting/` and share a
+  single private `_records` helper module.
+  Business logic MUST delegate to
+  `get_formatter(name).render(...)` and never
+  construct output strings directly.
+- **Resolution.**
+  1. Renamed files:
+     - `json_formatter.py` → `json.py`
+     - `csv_formatter.py` → `csv.py`
+     - `table_formatter.py` → `table.py`
+     (Python's absolute import machinery
+     correctly resolves ``import json`` /
+     ``import csv`` inside these files to the
+     stdlib because the file's own ``__name__``
+     is the qualified package path.)
+  2. Added new formatters:
+     - `markdown.py` — GitHub-Flavored-Markdown
+       tables with pipe escaping.
+     - `text.py` — line-oriented plain text
+       ("key: value" lines for dicts; one per
+       line for primitives; blank-line-separated
+       blocks for lists of dicts).
+  3. Updated
+     `un_comtrade/cli/utils/OUTPUT_FORMATS`
+     from `('json', 'table', 'csv')` to
+     `('json', 'table', 'csv', 'markdown',
+     'text')`.
+  4. ``un_comtrade/cli/formatting/__init__.py``
+     registers all five formatters in the
+     internal `_FORMATTERS` map and exposes
+     them as public names.
+- **Public API Impact.** None on the SDK. CLI
+  surface gains two new `--output-format`
+  values (`markdown`, `text`).
+- **Breaking Change.** No. The five formatters
+  are all reachable via `get_formatter(...)` or
+  the `un_comtrade.cli.formatting` package
+  surface.
+- **Verification Status.** Verified — 3019 /
+  3019 SDK tests pass (2956 baseline + 63 net
+  new in C-006; 3 expected skips). The
+  "Business logic never formats output"
+  constraint is enforced by a regex guard in
+  `tests/test_cli_formatters.py::TestBusinessLogicNeverFormats`
+  that fails on any `json.dumps`, `csv.writer`,
+  or `csv.DictWriter` reference in a CLI
+  command module.
+
+---
+
+## CHG-0089 — FC-001 ComtradeClient Public Facade
+
+- **Date.** 2026-06-29T04:37:00Z.
+- **Type.** Feature + Bug fix.
+- **Title.** `ComtradeClient` exposes the five public
+  service facades called out by the CLI Contract
+  Verification (`docs/033_CLI_CONTRACT_VERIFICATION.md`).
+- **Scope.** `un_comtrade/client.py`,
+  `un_comtrade/__init__.py`, `un_comtrade/etl.py`
+  (new `ETLFacade`), `un_comtrade/storage/_base.py`
+  (new `StorageRegistry.open()`), and a new
+  `tests/test_client_facade.py` (32 tests).
+- **Motivation.** The CLI Contract Verification (C-007A)
+  surfaced that `ComtradeClient` exposed only
+  `metadata`; the CLI's `trade` and `analytics`
+  commands relied on attributes that didn't exist
+  on the real client (`client.trade`, `client.analytics`).
+  Existing tests masked this by patching
+  `ComtradeClient` at the construction site of each
+  CLI command module. FC-001 closes the gap so the
+  CLI's real production code path works against the
+  real facade.
+- **Resolution.**
+  1. **`ComtradeClient` gains four new properties**
+     (each lazily constructed, per-client singleton,
+     sharing the client's transport + configuration
+     where applicable):
+     - `client.metadata`  → `MetadataService`
+       (already existed; preserved).
+     - `client.trade`     → `TradeService`
+       (new; built lazily on first access; shares
+       `transport` and `configuration`; the
+       service's `TradeParser` is auto-built so the
+       public methods work end-to-end out of the
+       box).
+     - `client.analytics` → `AnalyticsEngine`
+       (new; built lazily on first access; receives
+       a small mapping of the client's config —
+       `AnalyticsEngine.config` is a `Mapping[str,
+       Any]`, not the `Configuration` dataclass).
+     - `client.etl`       → `ETLFacade`
+       (new; thin factory that injects the client's
+       configuration into every pipeline it builds
+       via `client.etl.pipeline(name, stages)`).
+     - `client.storage`   → `StorageRegistry`
+       (new; exposes the five SDK backends and the
+       public `open(uri)` convenience method).
+  2. **`ComtradeClient(api_key="...")` string shortcut.**
+     The constructor now accepts a plain string and
+     wraps it in `Configuration(api_key=...)` for
+     ergonomics. Backward compatible: passing a
+     `Configuration` instance is unchanged.
+  3. **Top-level re-export.** `un_comtrade.__init__`
+     now re-exports `ComtradeClient` so callers can
+     write `from un_comtrade import ComtradeClient`.
+     The legacy `from un_comtrade.client import
+     ComtradeClient` path is preserved.
+  4. **`StorageRegistry.open(uri)` convenience
+     method.** Auto-detects the backend from the file
+     extension (``.csv`` / ``.json`` / ``.parquet`` /
+     ``.duckdb``), supports directory layouts, and
+     delegates to the concrete writer's `read()`.
+  5. **`ETLFacade` class** added to `un_comtrade.etl`.
+     Single public method: `pipeline(name, stages)`;
+     returns a ready-to-run `ETLPipeline` with the
+     facade's configuration injected.
+- **Public API Impact.** Additive. New symbols:
+  `un_comtrade.ComtradeClient` (top-level re-export),
+  `un_comtrade.etl.ETLFacade`,
+  `StorageRegistry.open()`,
+  `StorageRegistry._detect_backend()`,
+  `ComtradeClient.etl`, `.trade`, `.analytics`,
+  `.storage`. Constructor accepts four new optional
+  kwargs for advanced consumers.
+- **Breaking Change.** No.
+- **Verification Status.** Verified — 3117 / 3117
+  full suite passes (3085 baseline + 32 new in
+  `tests/test_client_facade.py`). Existing CLI +
+  contract suite still green (273 passed). The CLI's
+  production code path now works against the real
+  facade (no patching of `client.trade` /
+  `client.analytics` required); verified by
+  `tests/test_client_facade.py::TestCLIRunsAgainstRealFacade`.
 
 ---
 

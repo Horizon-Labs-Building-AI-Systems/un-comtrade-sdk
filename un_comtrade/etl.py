@@ -85,6 +85,7 @@ from .logging import get_logger
 
 
 __all__ = [
+    "ETLFacade",
     "ETLPipeline",
     "ExportStage",
     "ExtractStage",
@@ -606,4 +607,69 @@ class ETLPipeline:
             started_at=context.started_at,
             finished_at=context.finished_at,
             stage_durations=dict(context.stage_durations),
+        )
+
+
+# ---------------------------------------------------------------------------
+# ETLFacade — public client.etl facade (FC-001)
+# ---------------------------------------------------------------------------
+
+
+class ETLFacade:
+    """Public facade for the ETL pipeline layer.
+
+    Exposed via :attr:`un_comtrade.client.ComtradeClient.etl` so
+    callers can build pipelines that share the client's
+    :class:`un_comtrade.config.Configuration` without re-supplying
+    it each time.
+
+    Construction::
+
+        client = ComtradeClient()
+        pipeline = client.etl.pipeline(
+            name="trade_ingest",
+            stages=(stage_spec_a, stage_spec_b),
+        )
+        result = pipeline.run(source=...)
+
+    The facade does not duplicate the ``ETLPipeline`` runner; it
+    is a thin factory that injects the client's configuration.
+    """
+
+    def __init__(self, configuration: "Any") -> None:
+        self._configuration = configuration
+
+    @property
+    def configuration(self) -> "Any":
+        """The :class:`un_comtrade.config.Configuration` this
+        facade injects into new pipelines."""
+        return self._configuration
+
+    def pipeline(
+        self,
+        name: str,
+        stages: "tuple[StageSpec, ...] | list[StageSpec]",
+    ) -> "ETLPipeline":
+        """Build an :class:`ETLPipeline` that inherits the
+        client's configuration.
+
+        Parameters
+        ----------
+        name
+            Pipeline identifier (mirrored on the resulting
+            :class:`PipelineResult.pipeline_name`).
+        stages
+            Ordered tuple / list of :class:`StageSpec`
+            entries.
+
+        Returns
+        -------
+        ETLPipeline
+            A ready-to-run pipeline. Call ``pipeline.run(source)``
+            with the input dataset / payload.
+        """
+        return ETLPipeline(
+            name=name,
+            stages=tuple(stages),
+            config=self._configuration,
         )

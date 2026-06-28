@@ -15,7 +15,7 @@ Created
 2026-06-26T19:48:44Z
 
 Last Updated
-2026-06-29T00:10:00Z
+2026-06-29T03:50:00Z
 
 Author
 Codex
@@ -167,12 +167,31 @@ Test baseline: 2772 / 2772 SDK tests passing
 - **Audit closure (F-003 cross-reference).**
   TASK-091 closed the `DEFAULT_LOG_LEVEL`
   collision.
-- **Next recommended task.** TASK-093 —
-  Phase 7 CLI Foundation (P7-001):
-  `un-comtrade` console script via `argparse`,
-  35 analytics commands, JSON/table/CSV output,
-  full Storage integration.
-  Estimated effort: 8–12 hours.
+- **Next recommended task.** TASK-099 —
+  Phase 7 close-out verification. C-006
+  (TASK-098) shipped the formatter package
+  restructure: the five formatters
+  (`json`, `table`, `csv`, `markdown`,
+  `text`) live as separate files under
+  `un_comtrade/cli/formatting/` (no `_formatter`
+  suffix). The "Business logic never formats
+  output" constraint is enforced by a regex
+  guard in
+  `tests/test_cli_formatters.py::TestBusinessLogicNeverFormats`.
+  C-005 (TASK-097) shipped `storage` (4
+  write sub-subcommands) + `etl` (1 run
+  sub-subcommand); the "orchestration only"
+  guard in
+  `tests/test_cli_storage.py::TestOrchestrationOnly`
+  enforces it via AST + regex against
+  implementation keywords. CLI surface
+  total: 5 outer (`metadata`, `trade`,
+  `analytics`, `storage`, `etl`) + 1
+  default (`root`); 22 sub-subcommands; 5
+  output formats. Phase 7 is feature-complete;
+  the next step is the formal close-out
+  verification (test counts, public-API
+  freeze tag, version bump to 1.1.0).
 - **Original TASK-088 description (now
   historical, for traceability).** Apply R1
   (rename `logging.DEFAULT_LOG_LEVEL` →
@@ -680,6 +699,25 @@ Test baseline: 2772 / 2772 SDK tests passing
   name. Verified by 7 AST-level regression
   guards in
   `tests/test_f003_logging_constant_collision.py`.
+
+  **FC-001 update (2026-06-29T04:37:00Z,
+  TASK-100 / CHG-0089):** the
+  `ComtradeClient` facade is now complete.
+  The client exposes five service attributes
+  (`metadata`, `trade`, `analytics`, `etl`,
+  `storage`), each lazily constructed and a
+  per-client singleton. The CLI's real
+  production code path now works against
+  the real facade — verified by
+  `tests/test_client_facade.py::TestCLIRunsAgainstRealFacade`,
+  which runs the CLI's `metadata countries`
+  and `trade exports` commands with a real
+  `ComtradeClient` injected (no patching of
+  `client.metadata` or `client.trade`). Full
+  suite: 3,117 passed, 5 skipped. The CLI
+  Contract Verification
+  (`docs/033_CLI_CONTRACT_VERIFICATION.md` §9.2
+  latent bug) is closed.
 
 - **S-003 — Package Hygiene Audit.**
   Completed 2026-06-28T18:30:00Z.

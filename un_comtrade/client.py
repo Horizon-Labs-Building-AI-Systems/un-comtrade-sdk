@@ -6,11 +6,20 @@ consumers instantiate directly per the SDK specification
 P1-001 through P1-008 and exposes lifecycle hooks for
 clean shutdown.
 
-In Phase 1 (this task) the client is a SKELETON: it
-holds the configuration, builds the transport, and
-provides lifecycle methods. It does NOT yet expose any
-metadata or trade methods — those land in later phases
-per `IMPLEMENTATION_ROADMAP.md`.
+FC-001 (ComtradeClient public facade) extends the client
+with the four top-level service facades called out by the
+CLI Contract Verification (docs/033):
+
+- ``client.metadata``  — `MetadataService`
+- ``client.trade``     — `TradeService`
+- ``client.analytics`` — `AnalyticsEngine`
+- ``client.etl``       — `ETLFacade`
+- ``client.storage``   — `StorageRegistry`
+
+Each service is constructed lazily on first access and
+shares the client's configuration and transport where
+applicable. No service is duplicated: re-accessing the
+same property returns the same instance.
 
 Per spec §2.2:
 
@@ -50,10 +59,23 @@ class ComtradeClient:
     """Primary entry point for the UN Comtrade Python SDK.
 
     The client composes the infrastructure layers built in
-    earlier Phase 1 tasks. It owns one `HttpTransport`
-    instance for the lifetime of the client. Higher-level
-    methods (metadata / trade) will be added in subsequent
-    phases.
+    earlier Phase 1 tasks and the public service facades
+    added in FC-001. It owns one `HttpTransport` instance
+    for the lifetime of the client.
+
+    Public service accessors (all lazy, all singletons
+    per-client):
+
+    - ``client.metadata``  — reference catalogue service
+      (`MetadataService`).
+    - ``client.trade``     — trade-data service
+      (`TradeService`).
+    - ``client.analytics`` — analytics engine
+      (`AnalyticsEngine`).
+    - ``client.etl``       — ETL pipeline factory
+      (`ETLFacade`).
+    - ``client.storage``   — storage registry
+      (`StorageRegistry`).
 
     Usage::
 
@@ -62,7 +84,14 @@ class ComtradeClient:
 
         cfg = Configuration(api_key="...")
         with ComtradeClient(cfg) as client:
-            ...  # future metadata / trade methods
+            countries = client.metadata.get_countries()
+            exports = client.trade.get_exports(699, "2022")
+            summary = client.analytics.country_summary(
+                dataset, reporter_code=699,
+            )
+            pipeline = client.etl.pipeline("ingest", stages)
+            pipeline.run(source)
+            dataset = client.storage.open("data.parquet")
 
     Or, for the convenience of letting the SDK load the
     configuration from environment variables::
@@ -72,47 +101,77 @@ class ComtradeClient:
 
     def __init__(
         self,
-        configuration: Configuration | None = None,
+        configuration: Configuration | str | None = None,
         *,
         transport: HttpTransport | None = None,
         metadata_service: MetadataService | None = None,
         cache: MetadataCache | None = None,
         parser: MetadataParser | None = None,
+        trade_service: "TradeService | None" = None,
+        analytics_engine: "AnalyticsEngine | None" = None,
+        etl_facade: "ETLFacade | None" = None,
+        storage_registry: "StorageRegistry | None" = None,
     ) -> None:
         """Construct a client.
 
         Parameters
         ----------
         configuration
-            Optional `Configuration` instance. When `None`,
-            `load_configuration()` is called to read from
-            environment variables (and defaults). Per spec
-            §2.2, the configuration is treated as immutable
-            after construction.
+            Optional `Configuration` instance, or the
+            string ``"api_key=..."`` shortcut for tests.
+            When ``None``, ``load_configuration()`` is
+            called to read from environment variables
+            (and defaults). Per spec §2.2, the
+            configuration is treated as immutable after
+            construction.
         transport
-            Optional pre-built `HttpTransport`. When `None`,
-            the client builds one from the configuration
-            (recommended for most uses). When supplied, the
-            caller retains ownership — `close()` will not
-            close it. This is primarily useful for tests
-            that inject `httpx.MockTransport`-backed
-            transports.
+            Optional pre-built `HttpTransport`. When
+            `None`, the client builds one from the
+            configuration (recommended for most uses).
+            When supplied, the caller retains ownership
+            — `close()` will not close it. This is
+            primarily useful for tests that inject
+            `httpx.MockTransport`-backed transports.
         metadata_service
-            Optional pre-built `MetadataService`. When `None`,
-            the client constructs one lazily on first access
-            to `client.metadata`. When supplied, the caller
-            retains ownership.
+            Optional pre-built `MetadataService`. When
+            `None`, the client constructs one lazily on
+            first access to `client.metadata`. When
+            supplied, the caller retains ownership.
         cache
-            Optional pre-built `MetadataCache`. When `None`,
-            the client constructs a default platform-default
-            cache lazily when the metadata service is first
-            built. Pass `cache=None` explicitly to disable
-            caching.
+            Optional pre-built `MetadataCache`. When
+            `None`, the client constructs a default
+            platform-default cache lazily when the
+            metadata service is first built. Pass
+            `cache=None` explicitly to disable caching.
         parser
-            Optional pre-built `MetadataParser`. When `None`,
-            the client constructs a default `MetadataParser`
-            lazily when the metadata service is first built.
+            Optional pre-built `MetadataParser`. When
+            `None`, the client constructs a default
+            `MetadataParser` lazily when the metadata
+            service is first built.
+        trade_service
+            Optional pre-built `TradeService`. When
+            `None`, the client builds one on first access
+            to `client.trade` (sharing its `transport`
+            and `configuration`).
+        analytics_engine
+            Optional pre-built `AnalyticsEngine`. When
+            `None`, the client builds one on first access
+            to `client.analytics`.
+        etl_facade
+            Optional pre-built `ETLFacade`. When `None`,
+            the client builds one on first access to
+            `client.etl`.
+        storage_registry
+            Optional pre-built `StorageRegistry`. When
+            `None`, the client builds a default
+            `StorageRegistry` on first access to
+            `client.storage`.
         """
+        # Allow the string shortcut `ComtradeClient(api_key="...")`
+        # for ergonomics; resolve it to a `Configuration` before
+        # the rest of the constructor runs.
+        if isinstance(configuration, str):
+            configuration = Configuration(api_key=configuration)
         self._config: Configuration = (
             configuration if configuration is not None else load_configuration()
         )
@@ -140,6 +199,14 @@ class ComtradeClient:
         self._metadata_service: MetadataService | None = metadata_service
         self._metadata_cache = cache
         self._metadata_parser = parser
+
+        # FC-001: additional service facades. Each is lazily
+        # constructed on first access and shared across all
+        # subsequent accesses (singleton per-client).
+        self._trade_service: "TradeService | None" = trade_service
+        self._analytics_engine: "AnalyticsEngine | None" = analytics_engine
+        self._etl_facade: "ETLFacade | None" = etl_facade
+        self._storage_registry: "StorageRegistry | None" = storage_registry
 
     # ----- Properties -----------------------------------------------------
 
@@ -175,6 +242,80 @@ class ComtradeClient:
                 parser=self._metadata_parser,
             )
         return self._metadata_service
+
+    @property
+    def trade(self) -> "TradeService":
+        """The trade-data service owned by this client.
+
+        Constructed lazily on first access. The service
+        shares this client's ``transport`` and
+        ``configuration`` (per the FC-001 contract); it
+        does **not** take ownership of the transport.
+        """
+        if self._trade_service is None:
+            from .parser import TradeParser
+            from .trade import TradeService
+
+            self._trade_service = TradeService(
+                transport=self._transport,
+                configuration=self._config,
+                parser=TradeParser(),
+            )
+        return self._trade_service
+
+    @property
+    def analytics(self) -> "AnalyticsEngine":
+        """The analytics engine owned by this client.
+
+        Constructed lazily on first access. The engine
+        receives a small mapping of the client's
+        configuration so it can surface SDK-wide
+        settings (e.g. log level) on its results.
+        """
+        if self._analytics_engine is None:
+            from .analytics import AnalyticsEngine
+
+            self._analytics_engine = AnalyticsEngine(
+                name="comtrade",
+                config={
+                    "log_level": self._config.log_level,
+                    "schema_version": "1.0.0",
+                },
+            )
+        return self._analytics_engine
+
+    @property
+    def etl(self) -> "ETLFacade":
+        """The ETL pipeline facade owned by this client.
+
+        Constructed lazily on first access. The facade
+        injects a small mapping of this client's
+        configuration into every pipeline it builds
+        via ``ETLFacade.pipeline(...)``.
+        """
+        if self._etl_facade is None:
+            from .etl import ETLFacade
+
+            self._etl_facade = ETLFacade(configuration={
+                "log_level": self._config.log_level,
+                "base_url": self._config.base_url,
+            })
+        return self._etl_facade
+
+    @property
+    def storage(self) -> "StorageRegistry":
+        """The storage registry owned by this client.
+
+        Constructed lazily on first access. The
+        registry is a thin wrapper over the five SDK
+        backends; ``client.storage.open(uri)`` is the
+        public read path.
+        """
+        if self._storage_registry is None:
+            from .storage._base import StorageRegistry
+
+            self._storage_registry = StorageRegistry()
+        return self._storage_registry
 
     # ----- Lifecycle ------------------------------------------------------
 

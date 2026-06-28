@@ -79,9 +79,10 @@ Changelog = "https://github.com/un-comtrade/un-comtrade-sdk/blob/main/docs/CHANG
 Release_Notes = "https://github.com/un-comtrade/un-comtrade-sdk/blob/main/docs/032_v1_RELEASE_NOTES.md"
 
 [project.scripts]
-# Phase 7 CLI entry point will be registered
-# here in TASK-092 (P7-001). Currently empty.
-# un-comtrade = "un_comtrade.cli:main"
+# Phase 7 CLI Foundation entry point (C-001).
+# `pip install un-comtrade-sdk` registers the
+# `un-comtrade` console script.
+un-comtrade = "un_comtrade.cli.main:main"
 
 [tool.setuptools]
 include-package-data = true
