@@ -1,0 +1,14 @@
+[
+  {
+    "id": "A",
+    "text": "Annual"
+  },
+  {
+    "id": "Q",
+    "text": "Quarterly"
+  },
+  {
+    "id": "M",
+    "text": "Monthly"
+  }
+]

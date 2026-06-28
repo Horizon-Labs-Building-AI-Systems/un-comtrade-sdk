@@ -1,0 +1,42 @@
+[
+  {
+    "id": "M",
+    "text": "Import"
+  },
+  {
+    "id": "X",
+    "text": "Export"
+  },
+  {
+    "id": "DX",
+    "text": "Domestic Export"
+  },
+  {
+    "id": "FM",
+    "text": "Foreign Import"
+  },
+  {
+    "id": "MIP",
+    "text": "Import of goods for inward processing"
+  },
+  {
+    "id": "MOP",
+    "text": "Import of goods after outward processing"
+  },
+  {
+    "id": "RM",
+    "text": "Re-import"
+  },
+  {
+    "id": "RX",
+    "text": "Re-export"
+  },
+  {
+    "id": "XIP",
+    "text": "Export of goods after inward processing"
+  },
+  {
+    "id": "XOP",
+    "text": "Export of goods for outward processing"
+  }
+]

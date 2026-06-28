@@ -1,0 +1,323 @@
+{
+  "info": {
+    "name": "UN Comtrade API",
+    "_postman_id": "comtrade-2025",
+    "description": "Endpoints for the UN Comtrade public preview (no key, 500 records) and subscription-backed data endpoints (key required, 250K records). All requests use GET. Replace {{KEY}} with your subscription key from https://comtradedeveloper.un.org/profile .",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {"key": "key", "value": "Ocp-Apim-Subscription-Key", "type": "string"},
+      {"key": "value", "value": "{{KEY}}", "type": "string"},
+      {"key": "in", "value": "header", "type": "string"}
+    ]
+  },
+  "variable": [
+    {"key": "KEY", "value": "YOUR_KEY_HERE", "type": "string"},
+    {"key": "BASE", "value": "https://comtradeapi.un.org", "type": "string"}
+  ],
+  "item": [
+    {
+      "name": "Reference data (public)",
+      "item": [
+        {
+          "name": "List of all reference tables",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/ListofReferences.json"
+          }
+        },
+        {
+          "name": "Reporters (countries that report data)",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/Reporters.json"
+          }
+        },
+        {
+          "name": "Partners (countries that receive/send)",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/partnerAreas.json"
+          }
+        },
+        {
+          "name": "HS combined classification",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/HS.json"
+          }
+        },
+        {
+          "name": "HS 2022 (6-digit)",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/H6.json"
+          }
+        },
+        {
+          "name": "HS 2017 (6-digit)",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/H5.json"
+          }
+        },
+        {
+          "name": "SITC Rev.4",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/S4.json"
+          }
+        },
+        {
+          "name": "Trade flows",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/tradeRegimes.json"
+          }
+        },
+        {
+          "name": "Frequency",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/Frequency.json"
+          }
+        },
+        {
+          "name": "Data items (column codes)",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE}}/files/v1/app/reference/TradeDataItems.json"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trade data — public preview (no key, 500 records)",
+      "item": [
+        {
+          "name": "India 2022 annual exports — all products, all partners",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2022&flowCode=X&cmdCode=TOTAL&maxRecords=10",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699", "description": "India (current code)"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X", "description": "X=export, M=import"},
+                {"key": "cmdCode", "value": "TOTAL", "description": "TOTAL=all products"},
+                {"key": "maxRecords", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 annual imports — all products, all partners",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2022&flowCode=M&cmdCode=TOTAL&maxRecords=10",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "M"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "maxRecords", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 monthly exports — HS 7113 (jewellery)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/M/HS?reportercode=699&period=202201,202202,202203,202204,202205,202206,202207,202208,202209,202210,202211,202212&flowCode=X&cmdCode=7113&maxRecords=10",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "M", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "202201,202202,202203,202204,202205,202206,202207,202208,202209,202210,202211,202212"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "7113"},
+                {"key": "maxRecords", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 annual exports — HS chapter 30 (pharma)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2022&flowCode=X&cmdCode=30&maxRecords=10",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "30"},
+                {"key": "maxRecords", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 annual exports to WORLD (partnerCode=0)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2022&flowCode=X&cmdCode=TOTAL&partnerCode=0&maxRecords=5",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "partnerCode", "value": "0", "description": "0 = World aggregate"},
+                {"key": "maxRecords", "value": "5"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 annual exports to USA (partnerCode=842)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2022&flowCode=X&cmdCode=TOTAL&partnerCode=842&maxRecords=5",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "partnerCode", "value": "842"},
+                {"key": "maxRecords", "value": "5"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2018-2022 annual exports — multiple periods",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2018,2019,2020,2021,2022&flowCode=X&cmdCode=TOTAL&maxRecords=10",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "2018,2019,2020,2021,2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "maxRecords", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Count records (no body download)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/public/v1/preview/C/A/HS?reportercode=699&period=2022&flowCode=X&cmdCode=TOTAL&countOnly=true",
+              "host": ["{{BASE}}"],
+              "path": ["public", "v1", "preview", "C", "A", "HS"],
+              "query": [
+                {"key": "reportercode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "countOnly", "value": "true"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trade data — authenticated (key required, 250K records)",
+      "item": [
+        {
+          "name": "India 2022 annual exports — full pull (up to 250K)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/data/v1/get/C/A/HS?reporterCode=699&period=2022&flowCode=X&cmdCode=TOTAL&maxRecords=250000",
+              "host": ["{{BASE}}"],
+              "path": ["data", "v1", "get", "C", "A", "HS"],
+              "query": [
+                {"key": "reporterCode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "maxRecords", "value": "250000"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2018-2022 annual exports — full pull",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/data/v1/get/C/A/HS?reporterCode=699&period=2018,2019,2020,2021,2022&flowCode=X&cmdCode=TOTAL&maxRecords=250000",
+              "host": ["{{BASE}}"],
+              "path": ["data", "v1", "get", "C", "A", "HS"],
+              "query": [
+                {"key": "reporterCode", "value": "699"},
+                {"key": "period", "value": "2018,2019,2020,2021,2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "maxRecords", "value": "250000"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 trade balance (exports vs imports)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/tools/v1/getTradeBalance/C/A/HS?reporterCode=699&period=2022&cmdCode=TOTAL&partnerCode=0",
+              "host": ["{{BASE}}"],
+              "path": ["tools", "v1", "getTradeBalance", "C", "A", "HS"],
+              "query": [
+                {"key": "reporterCode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "cmdCode", "value": "TOTAL"},
+                {"key": "partnerCode", "value": "0"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "India 2022 tariffline — HS 7113 (line-level detail)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE}}/data/v1/getTariffline/C/A/HS?reporterCode=699&period=2022&flowCode=X&cmdCode=7113",
+              "host": ["{{BASE}}"],
+              "path": ["data", "v1", "getTariffline", "C", "A", "HS"],
+              "query": [
+                {"key": "reporterCode", "value": "699"},
+                {"key": "period", "value": "2022"},
+                {"key": "flowCode", "value": "X"},
+                {"key": "cmdCode", "value": "7113"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

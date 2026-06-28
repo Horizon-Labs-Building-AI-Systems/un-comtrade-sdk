@@ -1,0 +1,618 @@
+[
+  {
+    "id": "27",
+    "text": "27 - Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes",
+    "parent": "TOTAL",
+    "isLeaf": "0",
+    "aggrLevel": 2,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "2701",
+    "text": "2701 - Coal; briquettes, ovoids and similar solid fuels manufactured from coal",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270111",
+    "text": "270111 - Coal; anthracite, whether or not pulverised, but not agglomerated",
+    "parent": "2701",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270112",
+    "text": "270112 - Coal; bituminous, whether or not pulverised, but not agglomerated",
+    "parent": "2701",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270119",
+    "text": "270119 - Coal; (other than anthracite and bituminous), whether or not pulverised but not agglomerated",
+    "parent": "2701",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270120",
+    "text": "270120 - Briquettes, ovoids and similar solid fuels; manufactured from coal",
+    "parent": "2701",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2702",
+    "text": "2702 - Lignite; whether or not agglomerated, excluding jet",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270210",
+    "text": "270210 - Lignite; whether or not pulverised, but not agglomerated, excluding jet",
+    "parent": "2702",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270220",
+    "text": "270220 - Lignite; agglomerated, excluding jet",
+    "parent": "2702",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2703",
+    "text": "2703 - Peat; (including peat litter), whether or not agglomerated",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270300",
+    "text": "270300 - Peat; (including peat litter), whether or not agglomerated",
+    "parent": "2703",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2704",
+    "text": "2704 - Coke and semi-coke; of coal, lignite or peat, whether or not agglomerated; retort carbon",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270400",
+    "text": "270400 - Coke and semi-coke; of coal, lignite or peat, whether or not agglomerated; retort carbon",
+    "parent": "2704",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2705",
+    "text": "2705 - Coal gas, water gas, producer gas and similar gases, other than petroleum gases and other gaseous hydrocarbons",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270500",
+    "text": "270500 - Gases; coal, water, producer and similar gases (excluding petroleum and other gaseous hydrocarbons)",
+    "parent": "2705",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2706",
+    "text": "2706 - Tar distilled from coal, from lignite, peat and other mineral tars, whether or not dehydrated or partially distilled; including reconstituted tars",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270600",
+    "text": "270600 - Tar; distilled from coal, lignite or peat, and other mineral tars, whether or not dehydrated or partially distilled, including reconstituted tars",
+    "parent": "2706",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2707",
+    "text": "2707 - Oils and other products of the distillation of high temperature coal tar; similar products in which the weight of the aromatic constituents exceeds that of the non-aromatic constituents",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270710",
+    "text": "270710 - Oils and products of the distillation of high temperature coal tar; benzol (benzene)",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270720",
+    "text": "270720 - Oils and products of the distillation of high temperature coal tar; toluol (toluene)",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270730",
+    "text": "270730 - Oils and products of the distillation of high temperature coal tar; xylol (xylenes)",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270740",
+    "text": "270740 - Oils and products of the distillation of high temperature coal tar; naphthalene",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270750",
+    "text": "270750 - Aromatic hydrocarbon mixtures; n.e.c. in heading no. 2707, of which 65% or more by volume (including losses) distils at 250 degrees Celsius by the ISO 3405 method (equivalent to the ASTM D 86 method)",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270760",
+    "text": "270760 - - Phenols",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270791",
+    "text": "270791 - Oils and other products of the distillation of high temperature coal tar; creosote oils",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270799",
+    "text": "270799 - Oils and other products of the distillation of high temperature coal tar; n.e.c. in heading no. 2707",
+    "parent": "2707",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2708",
+    "text": "2708 - Pitch and pitch coke; obtained from coal tar or from other mineral tars",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270810",
+    "text": "270810 - Pitch; obtained from coal tar or from other mineral tars",
+    "parent": "2708",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "270820",
+    "text": "270820 - Pitch coke; obtained from coal tar or from other mineral tars",
+    "parent": "2708",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2709",
+    "text": "2709 - Petroleum oils and oils obtained from bituminous minerals; crude",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "270900",
+    "text": "270900 - Oils; petroleum oils and oils obtained from bituminous minerals, crude",
+    "parent": "2709",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2710",
+    "text": "2710 - Petroleum oils and oils from bituminous minerals, not crude; preparations n.e.c, containing by weight 70% or more of petroleum oils or oils from bituminous minerals; these being the basic constituents of the preparations; waste oils",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271000",
+    "text": "271000 - Petroleum oils and oils obtained from bituminous minerals, other than crude; preparations not elsewhere specified or included, containing by weight 70% or more of petroleum oils or of oils obtained from bituminous minerals, these oils b",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271011",
+    "text": "271011 - --  Light oils and preparations",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271012",
+    "text": "271012 - Petroleum oils and oils from bituminous minerals, not containing biodiesel, not crude, not waste oils; preparations n.e.c, containing by weight 70% or more of petroleum oils or oils from bituminous minerals; light oils and preparations",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271013",
+    "text": "271013 - Petroleum spirit except aviation or motor fuel **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271014",
+    "text": "271014 - Petroleum spirit-type fuel **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271015",
+    "text": "271015 - White spirit **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271016",
+    "text": "271016 - Petroleum naphtha **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271019",
+    "text": "271019 - Petroleum oils and oils from bituminous minerals, not containing biodiesel, not crude, not waste oils; preparations n.e.c, containing by weight 70% or more of petroleum oils or oils from bituminous minerals; not light oils and preparations",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271020",
+    "text": "271020 - Petroleum oils and oils from bituminous minerals, containing biodiesel, not crude, not waste oils; preparations n.e.c, containing by weight 70% or more of petroleum oils or oils from bituminous minerals",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271021",
+    "text": "271021 - Kerosene jet fuel **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271022",
+    "text": "271022 - Kerosene, for furnaces **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271025",
+    "text": "271025 - Kerosene lamp oil, motor kerosene, light diesel, etc **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271026",
+    "text": "271026 - Gas oils - bunker oil, No.1 furnace, motor diesel **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271027",
+    "text": "271027 - Diesel oils- No.2 furnace, marine diesel **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271029",
+    "text": "271029 - Fuel oils nes, heavy distillates **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271091",
+    "text": "271091 - Waste Oils; of petroleum or obtained from bituminous minerals, not crude; and preparations n.e.c., weight 70% or preparations of the same, containing polychlorinated biphenyls (PCBs), polychorinated terphenyls (PCTs) or polybrominated biphenyls (PBBs)",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271093",
+    "text": "271093 - Heavy furnace oil nes **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271094",
+    "text": "271094 - Petroleum oil used in road building **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271095",
+    "text": "271095 - Petroleum lubricating oils **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271096",
+    "text": "271096 - Petroleum lubricating greases **LEGACY NON-WCO CODE**",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271099",
+    "text": "271099 - Waste Oils; of petroleum or obtained from bituminous minerals, not crude and preparations n.e.c., weight 70% or preparations of the same, not containing polychlorinated biphenyls (PCBs), polychorinated terphenyls (PCTs) or polybrominated biphenyls (PBBs)",
+    "parent": "2710",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2711",
+    "text": "2711 - Petroleum gases and other gaseous hydrocarbons",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271111",
+    "text": "271111 - Petroleum gases and other gaseous hydrocarbons; liquefied, natural gas",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271112",
+    "text": "271112 - Petroleum gases and other gaseous hydrocarbons; liquefied, propane",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271113",
+    "text": "271113 - Petroleum gases and other gaseous hydrocarbons; liquefied, butanes",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271114",
+    "text": "271114 - Petroleum gases and other gaseous hydrocarbons; liquefied, ethylene, propylene, butylene and butadiene",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271119",
+    "text": "271119 - Petroleum gases and other gaseous hydrocarbons; liquefied, n.e.c. in heading no. 2711",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271121",
+    "text": "271121 - Petroleum gases and other gaseous hydrocarbons; in gaseous state, natural gas",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271129",
+    "text": "271129 - Petroleum gases and other gaseous hydrocarbons; in gaseous state, other than natural gas",
+    "parent": "2711",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2712",
+    "text": "2712 - Petroleum jelly; paraffin wax, micro-crystalline petroleum wax, slack wax, ozokerite, lignite wax, peat wax, other mineral waxes, similar products obtained by synthesis, other processes; coloured or not",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271210",
+    "text": "271210 - Petroleum jelly",
+    "parent": "2712",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271220",
+    "text": "271220 - Paraffin wax; containing by weight less than 0.75% of oil, obtained by synthesis or by other processes, whether or not coloured",
+    "parent": "2712",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271290",
+    "text": "271290 - Paraffin wax; containing by weight 0.75% or more of oil, obtained by synthesis or by other processes, whether or not coloured",
+    "parent": "2712",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2713",
+    "text": "2713 - Petroleum coke, petroleum bitumen; other residues of petroleum oils or oils obtained from bituminous minerals",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271311",
+    "text": "271311 - Petroleum coke; (not calcined), obtained from bituminous minerals",
+    "parent": "2713",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271312",
+    "text": "271312 - Petroleum coke; calcined, obtained from bituminous minerals",
+    "parent": "2713",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271320",
+    "text": "271320 - Petroleum bitumen; obtained from bituminous minerals",
+    "parent": "2713",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271390",
+    "text": "271390 - Residues; of petroleum oils or of oils obtained from bituminous minerals",
+    "parent": "2713",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2714",
+    "text": "2714 - Bitumen and asphalt, natural; bituminous or oil shale and tar sands; asphaltites and asphaltic rocks",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271410",
+    "text": "271410 - Bituminous or oil shale and tar sands",
+    "parent": "2714",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "271490",
+    "text": "271490 - Bitumen and asphalt, natural; asphaltites and asphaltic rock",
+    "parent": "2714",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2715",
+    "text": "2715 - Bituminous mixtures based on natural asphalt; on natural bitumen, on petroleum bitumen, on mineral tar or on mineral tar pitch (e.g. bituminous mastics, cut-backs)",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271500",
+    "text": "271500 - Bituminous mixtures based on natural asphalt, on natural bitumen, on petroleum bitumen, on mineral tar or on mineral tar pitch (e.g. bituminous mastics, cut-backs)",
+    "parent": "2715",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "kg"
+  },
+  {
+    "id": "2716",
+    "text": "2716 - Electrical energy",
+    "parent": "27",
+    "isLeaf": "0",
+    "aggrLevel": 4,
+    "standardUnitAbbr": "n/a"
+  },
+  {
+    "id": "271600",
+    "text": "271600 - Electrical energy",
+    "parent": "2716",
+    "isLeaf": "1",
+    "aggrLevel": 6,
+    "standardUnitAbbr": "1000 kWh"
+  }
+]

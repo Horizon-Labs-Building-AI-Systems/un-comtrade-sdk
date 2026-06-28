@@ -1,0 +1,19 @@
+{
+  "metadata_schema_version": "1.0.0",
+  "dataset_name": "p",
+  "schema_version": "1.0.0",
+  "parser_name": "TradeParser",
+  "record_count": 0,
+  "skipped": 0,
+  "duplicates_removed": 0,
+  "source_count": 0,
+  "extracted_at": "2026-06-27T21:04:19.016452+00:00",
+  "stored_at": "2026-06-27T21:04:19.019713+00:00",
+  "partition_keys": [],
+  "backend": "csv",
+  "destination": "un_comtrade_data",
+  "extra": {
+    "csv_schema_version": "1.0.0",
+    "compression": "none"
+  }
+}

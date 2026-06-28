@@ -1,0 +1,58 @@
+{
+  "size_name": "small",
+  "records_requested": 1000,
+  "records_parsed": 1000,
+  "build_raw_ms": 8.651000000099884,
+  "parse_ms": 84.21480000106385,
+  "benchmarks": {
+    "country_balance": {
+      "ms": 1.5096999995876104,
+      "rows": 20
+    },
+    "country_ranking_top10": {
+      "ms": 25.020599998242687,
+      "rows": 10
+    },
+    "country_trend_reporter1": {
+      "ms": 4.637699999875622,
+      "rows": 2
+    },
+    "partner_trade_balance_reporter1": {
+      "ms": 2.600300002086442,
+      "rows": 50
+    },
+    "top_partners_reporter1": {
+      "ms": 7.385999997495674,
+      "rows": 10
+    },
+    "country_vs_country_5": {
+      "ms": 16.137300000991672,
+      "rows": 50
+    },
+    "duckdb_store": {
+      "ms": 38981.52549999941,
+      "rec_per_sec": 25.653177682849154
+    },
+    "parquet_store": {
+      "ms": 623.1903999978385,
+      "rec_per_sec": 1604.6460279289738
+    },
+    "csv_store": {
+      "ms": 101.54770000008284,
+      "rec_per_sec": 9847.5888670958
+    },
+    "json_store": {
+      "ms": 159.25219999917317,
+      "rec_per_sec": 6279.3481032299205
+    },
+    "qe_filter": {
+      "ms": 2.2250000001804437,
+      "rec": 50
+    },
+    "qe_group_by": {
+      "ms": 3.44789999871864,
+      "groups": 20
+    },
+    "memory_mb": 70.20703125
+  }
+}

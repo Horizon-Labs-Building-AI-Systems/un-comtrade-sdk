@@ -1,0 +1,174 @@
+=== Source -> Targets ===
+un_comtrade.__init__
+  -> un_comtrade.__version__
+un_comtrade.analytics.__init__
+  -> un_comtrade.analytics.balance
+  -> un_comtrade.analytics.commodity
+  -> un_comtrade.analytics.compare
+  -> un_comtrade.analytics.country
+  -> un_comtrade.analytics.exceptions
+  -> un_comtrade.analytics.models.trade
+  -> un_comtrade.analytics.partner
+  -> un_comtrade.analytics.timeseries
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics
+  -> un_comtrade.analytics.models.trade
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics.balance
+  -> un_comtrade.analytics
+  -> un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics.partner
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics.commodity
+  -> un_comtrade.analytics
+  -> un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics.compare
+  -> un_comtrade.analytics
+  -> un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics.country
+  -> un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics.partner
+  -> un_comtrade.analytics
+  -> un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics.transform
+un_comtrade.analytics.timeseries
+  -> un_comtrade.analytics
+  -> un_comtrade.analytics._query_engine
+  -> un_comtrade.analytics.transform
+un_comtrade.async_jobs
+  -> un_comtrade.exceptions
+  -> un_comtrade.logging
+  -> un_comtrade.transport
+un_comtrade.batch
+  -> un_comtrade.logging
+  -> un_comtrade.models
+  -> un_comtrade.trade
+un_comtrade.client
+  -> un_comtrade.cache
+  -> un_comtrade.config
+  -> un_comtrade.logging
+  -> un_comtrade.metadata
+  -> un_comtrade.parser
+  -> un_comtrade.transport
+un_comtrade.config
+  -> un_comtrade.exceptions
+un_comtrade.etl
+  -> un_comtrade.exceptions
+  -> un_comtrade.logging
+un_comtrade.export
+  -> un_comtrade.etl
+  -> un_comtrade.exceptions
+  -> un_comtrade.logging
+  -> un_comtrade.transform
+un_comtrade.extract
+  -> un_comtrade.batch
+  -> un_comtrade.etl
+  -> un_comtrade.logging
+  -> un_comtrade.metadata
+  -> un_comtrade.trade
+un_comtrade.metadata
+  -> un_comtrade.cache
+  -> un_comtrade.models
+  -> un_comtrade.parser
+  -> un_comtrade.transport
+un_comtrade.models.__init__
+  -> un_comtrade.models.classification
+  -> un_comtrade.models.country
+  -> un_comtrade.models.data_item
+  -> un_comtrade.models.frequency
+  -> un_comtrade.models.hs_code
+  -> un_comtrade.models.quantity_unit
+  -> un_comtrade.models.reference_entry
+  -> un_comtrade.models.response
+  -> un_comtrade.models.trade
+  -> un_comtrade.models.trade_flow
+  -> un_comtrade.models.transport_mode
+un_comtrade.models.classification
+  -> un_comtrade.models._base
+un_comtrade.models.country
+  -> un_comtrade.models._base
+un_comtrade.models.data_item
+  -> un_comtrade.models._base
+un_comtrade.models.frequency
+  -> un_comtrade.models._base
+un_comtrade.models.hs_code
+  -> un_comtrade.models._base
+un_comtrade.models.quantity_unit
+  -> un_comtrade.models._base
+un_comtrade.models.reference_entry
+  -> un_comtrade.models._base
+un_comtrade.models.response
+  -> un_comtrade.models._base
+  -> un_comtrade.models.trade
+un_comtrade.models.trade
+  -> un_comtrade.models._base
+un_comtrade.models.trade_flow
+  -> un_comtrade.models._base
+un_comtrade.models.transport_mode
+  -> un_comtrade.models._base
+un_comtrade.pagination
+  -> un_comtrade.exceptions
+  -> un_comtrade.logging
+  -> un_comtrade.models
+  -> un_comtrade.parser
+un_comtrade.parser
+  -> un_comtrade.logging
+  -> un_comtrade.models
+un_comtrade.storage.__init__
+  -> un_comtrade.storage
+  -> un_comtrade.storage._base
+  -> un_comtrade.storage.update
+un_comtrade.storage._base
+  -> un_comtrade.storage
+  -> un_comtrade.storage.etl
+  -> un_comtrade.storage.exceptions
+  -> un_comtrade.storage.logging
+  -> un_comtrade.storage.transform
+un_comtrade.storage.duckdb
+  -> un_comtrade.storage._base
+  -> un_comtrade.storage.etl
+  -> un_comtrade.storage.exceptions
+  -> un_comtrade.storage.logging
+  -> un_comtrade.storage.transform
+un_comtrade.storage.file
+  -> un_comtrade.storage._base
+  -> un_comtrade.storage.etl
+  -> un_comtrade.storage.exceptions
+  -> un_comtrade.storage.logging
+  -> un_comtrade.storage.transform
+un_comtrade.storage.parquet
+  -> un_comtrade.storage._base
+  -> un_comtrade.storage.etl
+  -> un_comtrade.storage.exceptions
+  -> un_comtrade.storage.logging
+  -> un_comtrade.storage.models
+  -> un_comtrade.storage.transform
+un_comtrade.storage.update
+  -> un_comtrade.storage._base
+  -> un_comtrade.storage.duckdb
+  -> un_comtrade.storage.file
+  -> un_comtrade.storage.models.trade
+  -> un_comtrade.storage.parquet
+  -> un_comtrade.storage.parser
+  -> un_comtrade.storage.transform
+un_comtrade.trade
+  -> un_comtrade.config
+  -> un_comtrade.exceptions
+  -> un_comtrade.models
+  -> un_comtrade.parser
+  -> un_comtrade.query
+  -> un_comtrade.transport
+un_comtrade.transform
+  -> un_comtrade.etl
+  -> un_comtrade.logging
+  -> un_comtrade.models
+  -> un_comtrade.parser
+un_comtrade.transport
+  -> un_comtrade.exceptions
+  -> un_comtrade.logging
+
+=== Non-trivial SCCs (cycles) ===

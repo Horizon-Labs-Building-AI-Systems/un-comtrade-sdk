@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "un-comtrade-sdk"
+version = "1.0.1"
+description = "Python SDK for the UN Comtrade (UNSD) trade statistics API"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Codex" },
+]
+keywords = [
+    "un-comtrade",
+    "unsd",
+    "trade",
+    "trade-statistics",
+    "comtrade",
+    "sdk",
+    "api",
+    "etl",
+    "analytics",
+    "storage",
+]
+classifiers = [
+    # v1.0.1 ships a stable, audited, production-
+    # ready SDK. Per PyPA guidance, we use
+    # "5 - Production/Stable" once v1.0.0 is
+    # released and no API-breaking changes are
+    # planned in the next minor.
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Typing :: Typed",
+]
+dependencies = [
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+# Parquet + DuckDB storage backends require
+# optional deps. `pip install un-comtrade-sdk[parquet]`
+# or `pip install un-comtrade-sdk[duckdb]` to
+# enable them.
+parquet = [
+    "pyarrow>=14.0",
+]
+duckdb = [
+    "duckdb>=1.0",
+    "pyarrow>=14.0",
+]
+all = [
+    "pyarrow>=14.0",
+    "duckdb>=1.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[project.urls]
+Homepage = "https://github.com/un-comtrade/un-comtrade-sdk"
+Documentation = "https://un-comtrade-sdk.readthedocs.io/"
+Repository = "https://github.com/un-comtrade/un-comtrade-sdk"
+Issues = "https://github.com/un-comtrade/un-comtrade-sdk/issues"
+Changelog = "https://github.com/un-comtrade/un-comtrade-sdk/blob/main/docs/CHANGELOG.md"
+Release_Notes = "https://github.com/un-comtrade/un-comtrade-sdk/blob/main/docs/032_v1_RELEASE_NOTES.md"
+
+[project.scripts]
+# Phase 7 CLI entry point will be registered
+# here in TASK-092 (P7-001). Currently empty.
+# un-comtrade = "un_comtrade.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["un_comtrade*"]
+exclude = ["tests*", "docs*", "data*", "examples*", "scripts*"]
