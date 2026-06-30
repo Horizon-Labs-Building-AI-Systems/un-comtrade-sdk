@@ -84,7 +84,6 @@ _b_duckdb_*
 _b_duckdb_*.wal
 _cors_check.py
 _inspect_samples.py
-_*.py
 _*.db
 _*.db.wal
 
