@@ -374,7 +374,11 @@ class TestJSONWriter:
         config = StorageConfig(root=str(tmp_root))
         writer.store(dataset, config)
 
-        json_files = list(tmp_root.rglob("*.json"))
+        json_files = [
+            p
+            for p in tmp_root.rglob("*.json")
+            if not p.name.endswith(".meta.json")
+        ]
         with json_files[0].open("rt", encoding="utf-8") as fh:
             payload = json.load(fh)
         # Decimal values are strings (exact precision).
@@ -426,7 +430,11 @@ class TestJSONWriter:
         result = writer.store(dataset, config)
 
         assert result.empty
-        json_files = list(tmp_root.rglob("*.json"))
+        json_files = [
+            p
+            for p in tmp_root.rglob("*.json")
+            if not p.name.endswith(".meta.json")
+        ]
         with json_files[0].open("rt", encoding="utf-8") as fh:
             payload = json.load(fh)
         assert payload["count"] == 0
