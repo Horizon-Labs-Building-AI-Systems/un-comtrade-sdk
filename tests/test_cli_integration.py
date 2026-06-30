@@ -66,6 +66,8 @@ from unittest import mock
 
 import pytest
 
+import un_comtrade
+
 from un_comtrade.cli import (
     EXIT_AUTH_ERROR,
     EXIT_CONFIG_ERROR,
@@ -1111,7 +1113,7 @@ class TestEndToEndSmoke:
             timeout=10,
         )
         assert result.returncode == 0
-        assert "1.0.1" in result.stdout
+        assert un_comtrade.__version__ in result.stdout
 
     @pytest.mark.skipif(
         sys.platform.startswith("win")
