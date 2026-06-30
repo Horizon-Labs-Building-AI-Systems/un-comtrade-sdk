@@ -84,10 +84,15 @@ jobs:
       - name: Run TruffleHog
         uses: trufflesecurity/trufflehog@main
         with:
-          # Compare default branch → current HEAD, per CI-SEC-001.
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
-          # Fail the workflow if any secret is detected.
+          # Let the official action resolve the commit range
+          # automatically from the GitHub event (push,
+          # pull_request, workflow_dispatch, schedule, etc.).
+          # An explicit `base:` + `head:` pair collapses to a
+          # single commit on `push` events targeting the default
+          # branch, which TruffleHog rejects with
+          # ``BASE and HEAD commits are the same``. The
+          # action's automatic detection handles every event
+          # type correctly.
           extra_args: --results=verified,unknown --fail
         env:
           # The action's only credential input is GITHUB_TOKEN,
