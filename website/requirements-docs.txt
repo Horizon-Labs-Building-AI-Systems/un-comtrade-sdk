@@ -1,0 +1,70 @@
+# Documentation build requirements (D9-002 / MkDocs Foundation).
+#
+# Per protocol §8.1 (API reference generated via mkdocstrings) and
+# §5.5 (orphan detection) + §12 (verification hooks), the
+# documentation site is built with the following pinned versions.
+# Pinning ensures every contributor builds the site with the same
+# toolchain and the same plugin behaviour.
+
+# Core MkDocs.
+mkdocs==1.6.1
+
+# Theme (per protocol §5.1 — Material for MkDocs).
+material==9.5.49
+
+# Generated API reference (per protocol §8.1).
+mkdocstrings==0.27.0
+mkdocstrings-python==1.13.0
+
+# Markdown extensions referenced by mkdocs.yml.
+#
+# Pinning notes (D9-014):
+# - pymdown-extensions must stay in the 10.x series that
+#   mkdocs-material 9.5.49 requires (`~=10.2`).
+# - pygments must stay on 2.18.x because pygments 2.19+
+#   rejects `None` for the `filename` argument passed by
+#   `pymdownx.highlight`, raising
+#   `AttributeError: 'NoneType' object has no attribute 'replace'`
+#   in pygments.formatters.html.HtmlFormatter.__init__.
+#   This combination is the documented-working pair as of 2026-06-30.
+pymdown-extensions==10.12
+pygments==2.18.0
+
+# Search plugin extras.
+mkdocs-material[imaging]==9.5.49
+
+# Versioned documentation helper (per protocol §10 — multi-version
+# publishing with mike).
+mike==2.1.3
+
+# Git-revision-date plugin (per protocol §11 — page metadata).
+mkdocs-git-revision-date-localized-plugin==0.10.1
+
+# Autorefs for cross-references (per protocol §5.4).
+mkdocs-autorefs==1.2.0
+
+# Exclude-search plugin for archive content (per protocol §11.2).
+mkdocs-exclude-search==0.6.4
+
+# Section-index plugin for landing-page links (per protocol §4).
+mkdocs-section-index==0.3.9
+
+# Note: `attr_list` is a built-in Markdown extension (already listed
+# in `mkdocs.yml` under `markdown_extensions`). There is no separate
+# `mkdocs-attr-list` plugin in the official MkDocs plugin registry
+# (as of D9-002); the frontmatter-driven `attr:` block style is
+# enabled via `attr_list` extension + pymdownx.snippets, which is
+# the canonical MkDocs Material setup.
+
+# Link checker (per protocol §12.2 — zero broken links).
+lychee==0.15.1
+
+# Markdown link checker (Python alternative; runs inside Python).
+# Used by the build script's link-checking step.
+markdown-link-check==1.4.1
+
+# Signature formatter (per mkdocstrings requirement — either
+# Black or Ruff must be installed for `signature_crossrefs` and
+# `separate_signature` to render formatted signatures). Ruff is
+# lighter than Black and avoids the formatting as a side-effect.
+ruff==0.6.9

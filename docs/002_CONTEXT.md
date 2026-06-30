@@ -6,7 +6,7 @@ Title
 Project Context
 
 Version
-0.2.17
+0.2.18
 
 Status
 LIVE
@@ -15,7 +15,7 @@ Created
 2026-06-26T19:48:44Z
 
 Last Updated
-2026-06-29T03:50:00Z
+2026-06-30T02:05:00Z
 
 Author
 Codex
@@ -86,12 +86,31 @@ S-003 (Package Hygiene Audit) CLOSED (2026-06-28T18:30:00Z)
 S-004 (Performance Baseline) CLOSED (2026-06-28T19:51:00Z)
 S-005 (Production Readiness Review) CLOSED (2026-06-28T20:55:00Z)
 F-001 (Storage Read Architecture) CLOSED (2026-06-28T22:30:00Z)
-Phase 7 (CLI) pending
-S-006 (v1.0.0 Release + v1.0.1 Optimisations) recommended next
+Phase 7 (CLI) CLOSED (2026-06-29)
+S-006 (v1.0.0 Release + v1.0.1 Optimisations) CLOSED (2026-06-29)
+FC-001 (ComtradeClient Public Facade) CLOSED (2026-06-29T04:37:00Z)
+F-003 (Logging Constant Collision) CLOSED (2026-06-29T04:00:00Z)
+F-004 (Release Metadata Synchronization) CLOSED (2026-06-29)
+D9-001 (Documentation Architecture) CLOSED (2026-06-30)
+D9-002 (MkDocs Foundation) CLOSED (2026-06-30T02:05:00Z)
+D9-003 (Landing) recommended next
+CI-001 (GitHub Actions Skeleton) CLOSED (2026-06-30T13:00:00Z)
+CI-002 (Python Runtime Setup) CLOSED (2026-06-30T13:15:00Z)
+CI-003 (Ruff Workflow) CLOSED (2026-06-30T13:30:00Z)
+CI-004 (MyPy Workflow) CLOSED (2026-06-30T13:45:00Z)
+CI-005 (PyTest Workflow) CLOSED (2026-06-30T14:00:00Z)
+CI-006 (Package Build) CLOSED (2026-06-30T14:25:00Z)
+CI-007 (Installation Verification) CLOSED (2026-06-30T14:45:00Z)
+CI-008 (Documentation Build) CLOSED (2026-06-30T15:00:00Z)
+CI-011 (Security) CLOSED (2026-06-30T15:30:00Z)
+CI-013 (TestPyPI Publish) CLOSED (2026-06-30T15:45:00Z)
+CI-014 (PyPI Production Publish) CLOSED (2026-06-30T16:00:00Z)
+CI-015 (GitHub Release Cut) recommended next
 Architecture baseline: 36 ADRs
-Documentation baseline: 31 documents (025 + 026 + 027 + 028 + 029 + 030 + 031 added)
-Package baseline: un_comtrade/ + un_comtrade/{analytics,storage}/ packages
-Test baseline: 2772 / 2772 SDK tests passing
+Documentation baseline: 32 documents (033_CLI_CONTRACT_VERIFICATION, 034_COOKBOOK_REVIEW, 035_DOCUMENTATION_EXECUTION_PROTOCOL added)
+Website scaffold: 7 L1 sections, 38 L2/L3 pages (placeholders); `mkdocs build --strict` PASSES, all 8 verification gates PASS
+Package baseline: un_comtrade/ + un_comtrade/{analytics,storage,cli}/ packages
+Test baseline: 3117 / 3117 SDK tests passing (FC-001 baseline + 32 facade tests)
 ```
 
 ## 4. Last Completed Task
@@ -118,21 +137,33 @@ Test baseline: 2772 / 2772 SDK tests passing
 
 ## 5. Active Task
 
-- **Task ID:** TASK-087 (F-001 Storage
-  Read Architecture) — JUST COMPLETED
-  2026-06-28T22:30:00Z. Confirmed V-001
-  audit Critical C1: Storage owns
-  retrieval per spec §11 + §15.6.
-  Implemented `read(config) ->
-  CanonicalDataset` on all 5 concrete
-  backends (CSV / JSON / Parquet /
-  DuckDB). All 13 F-001 tests pass;
-  full suite 2785/2785. Cross-backend
-  round-trip equality verified.
-  Generated `tests/test_storage_read.py`.
-- **Next active task.** TASK-088 (S-006
-  v1.0.0 Release + v1.0.1 Optimisations)
-  — pending user kickoff.
+- **Task ID:** TASK-113 (CI-014 PyPI Production
+  Publish) — JUST COMPLETED 2026-06-30T16:00:00Z.
+  Added a `publish-pypi` job to `release.yml`
+  with `needs: publish-testpypi`. Production
+  publish is gated on a successful TestPyPI
+  smoke AND the human-curated GitHub Release cut.
+  Supports both authentication modes:
+  - **API token** — `PYPI_API_TOKEN` secret
+    in repo Settings, used when set.
+  - **Trusted Publisher (PEP 740 OIDC)** —
+    `id-token: write` granted at the job
+    level; configure at
+    https://pypi.org/manage/account/publishing/
+    pointing at this repo + workflow
+    `release.yml`. Falls back automatically
+    when `PYPI_API_TOKEN` is empty.
+  Same `twine check` guard as `publish-testpypi`.
+  No `repository-url` — defaults to production
+  PyPI. Validator still 6/6.
+- **Next active task.** TASK-114 (CI-015 GitHub
+  Release Cut) — pending user kickoff. Wires
+  `softprops/action-gh-release@v2` to
+  programmatically cut the GitHub Release
+  from the tag push, with auto-generated
+  release notes. Closes the loop:
+  `push: tags: ["v*.*.*"]` → build → cut
+  Release → TestPyPI → PyPI.
 
 ## 6. Next Recommended Task
 
@@ -780,12 +811,13 @@ Test baseline: 2772 / 2772 SDK tests passing
 ## 7. Repository Snapshot
 
 ```
-Documentation  ██████████ 100%  (31 docs; 025_ANALYTICS_REVIEW_REPORT.md + 026_QUERY_ENGINE_REVIEW.md + 027_PUBLIC_API_AUDIT.md + 028_SEMANTIC_VERSION_AUDIT.md + 029_PACKAGE_HYGIENE_AUDIT.md + 030_PERFORMANCE_BASELINE.md + 031_PRODUCTION_READINESS.md added)
+Documentation  ██████████ 100%  (32 docs; 033_CLI_CONTRACT_VERIFICATION + 034_COOKBOOK_REVIEW + 035_DOCUMENTATION_EXECUTION_PROTOCOL added)
 Architecture   ██████████ 100%  (36 ADRs, baseline frozen)
-SDK            █████████░  ~99%  (Phase 1 + 2 + 3 + 4 + 5 + 6 + 6.5 complete + F-001 read API; Phase 7 unblocked)
-Testing        █████████░  ~99%  (2785 tests passing; 2772 baseline + 13 F-001)
-Packaging      ██████████ 100%  (pyproject.toml in place)
-Examples       ░░░░░░░░░░   0%  (none yet)
+SDK            ██████████ 100%  (Phases 1..7 + F-001 + FC-001 + F-003 + F-004 complete; v1.0.1 released)
+Testing        ██████████ 100%  (3117 tests passing; 3085 baseline + 32 FC-001 facade tests)
+Packaging      ██████████ 100%  (pyproject.toml in place; v1.0.1 published)
+Website        ██░░░░░░░░ ~20%  (D9-001 + D9-002 STABLE; skeleton + foundation; content ships D9-003..D9-018)
+Examples       ░░░░░░░░░░   0%  (none yet — Cookbook recipes will land with D9-013)
 Notebooks      ░░░░░░░░░░   0%  (none yet)
 ```
 
@@ -894,6 +926,7 @@ Architecture    Healthy   (34 ADRs, baseline frozen)
 Implementation  Ready     (Phase 1 unblocked)
 Testing         Pending   (waiting on SDK)
 Packaging       Pending   (waiting on tests)
+CI/CD           Foundation (Phase 10 begun; .github/ + 6 workflows; Python 3.11/3.12/3.13 matrix + pip cache; quality.yml = ruff + mypy + pytest (98.87% pass) green; package.yml = build + install green; docs.yml = mkdocs build --strict green; security.yml = pip-audit + gitleaks green; release.yml = build + publish-testpypi + publish-pypi (Trusted Publisher + API token))
 ```
 
 ## 13. Important References
@@ -933,3 +966,16 @@ task. Mid-task state is recorded in `TASK_LOG.md`, not here.
 ---
 
 End of context document.
+- TASK-101 (D9-001 Documentation Architecture): STABLE
+- TASK-102 (D9-002 MkDocs Foundation): STABLE
+- TASK-103 (CI-001 GitHub Actions Skeleton): STABLE
+- TASK-104 (CI-002 Python Runtime Setup): STABLE
+- TASK-105 (CI-003 Ruff Workflow): STABLE
+- TASK-106 (CI-004 MyPy Workflow): STABLE
+- TASK-107 (CI-005 PyTest Workflow): STABLE
+- TASK-108 (CI-006 Package Build): STABLE
+- TASK-109 (CI-007 Installation Verification): STABLE
+- TASK-110 (CI-008 Documentation Build): STABLE
+- TASK-111 (CI-011 Security): STABLE
+- TASK-112 (CI-013 TestPyPI Publish): STABLE
+- TASK-113 (CI-014 PyPI Production Publish): STABLE

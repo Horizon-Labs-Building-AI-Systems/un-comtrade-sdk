@@ -1,5 +1,14 @@
 # un-comtrade-sdk
 
+[![CI](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/quality.yml/badge.svg)](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/quality.yml)
+[![Security](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/security.yml/badge.svg)](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/security.yml)
+[![Package](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/package.yml/badge.svg)](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/package.yml)
+[![Docs](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/docs.yml/badge.svg)](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/docs.yml)
+[![Release](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/release.yml/badge.svg)](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/release.yml)
+[![PyPI version](https://img.shields.io/pypi/v/un-comtrade-sdk.svg)](https://pypi.org/project/un-comtrade-sdk/)
+[![Python versions](https://img.shields.io/pypi/pyversions/un-comtrade-sdk.svg)](https://pypi.org/project/un-comtrade-sdk/#files)
+[![License](https://img.shields.io/github/license/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk.svg)](./LICENSE)
+
 Python SDK for the UN Comtrade (UNSD) trade statistics API.
 
 > **Status:** Project bootstrap. The package skeleton exists; no

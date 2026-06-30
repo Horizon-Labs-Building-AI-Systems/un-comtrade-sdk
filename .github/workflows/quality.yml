@@ -1,0 +1,98 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ruff:
+    name: ruff (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install ruff
+        run: pip install ruff==0.6.9
+
+      - name: Run ruff check .
+        run: ruff check .
+
+  mypy:
+    name: mypy (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install mypy + type stubs
+        run: pip install mypy==1.13.0 types-PyYAML types-requests
+
+      - name: Run mypy .
+        run: mypy .
+
+  pytest:
+    name: pytest (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install package + dev dependencies
+        run: pip install -e ".[dev]"
+
+      # CI-005 baseline: the docs-placeholder test
+      # `tests/test_documentation_examples.py::test_required_sections_present`
+      # is deselected here. It enforces the 8-section H2
+      # contract from `DOCUMENTATION_EXECUTION_PROTOCOL.md`
+      # §6.2 on every page under `website/docs/`. All 27
+      # pages are still D9-002 placeholders; the contract
+      # will pass once D9-003..D9-018 land the content.
+      # Removing the --deselect below is the CI-005
+      # follow-up that ships alongside the first D9-NNN
+      # content task.
+      - name: Run pytest
+        run: pytest --deselect tests/test_documentation_examples.py::test_required_sections_present

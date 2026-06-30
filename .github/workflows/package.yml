@@ -1,0 +1,105 @@
+name: Package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install PEP 517 builder
+        run: pip install build
+
+      - name: Build sdist + wheel
+        run: python -m build
+
+      - name: Verify artifacts exist
+        run: |
+          test -f dist/*.whl  || (echo "::error::wheel not found in dist/" && exit 1)
+          test -f dist/*.tar.gz || (echo "::error::sdist not found in dist/" && exit 1)
+          echo "Artifacts:"
+          ls -la dist/
+
+      - name: Upload wheel + sdist as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.python-version }}
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          if-no-files-found: error
+          retention-days: 14
+
+  install:
+    name: install (python ${{ matrix.python-version }})
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Download wheel artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ matrix.python-version }}
+          path: dist
+
+      - name: Create fresh virtual environment
+        run: python -m venv .ci-install-venv
+
+      - name: Install wheel into fresh venv
+        run: .ci-install-venv/bin/pip install --quiet dist/*.whl
+
+      - name: Verify `import un_comtrade`
+        run: .ci-install-venv/bin/python -c "import un_comtrade; assert un_comtrade.__version__ == '1.0.1'; print('import OK, version=', un_comtrade.__version__)"
+
+      - name: Verify CLI executable
+        run: |
+          set -e
+          CLI=".ci-install-venv/bin/un-comtrade"
+          "$CLI" --version
+          "$CLI" --help > /dev/null
+          echo "CLI OK: $CLI"
+
+      - name: Remove fresh venv
+        if: always()
+        run: rm -rf .ci-install-venv

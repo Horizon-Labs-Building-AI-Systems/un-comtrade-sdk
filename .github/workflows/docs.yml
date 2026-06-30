@@ -1,0 +1,62 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: mkdocs build (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install docs toolchain
+        run: pip install -r website/requirements-docs.txt
+
+      - name: Build documentation site (strict)
+        working-directory: website
+        run: python -m mkdocs build --strict
+
+      - name: Verify site directory populated
+        working-directory: website
+        run: |
+          test -f site/index.html        || (echo "::error::site/index.html missing"        && exit 1)
+          test -f site/404.html          || (echo "::error::site/404.html missing"          && exit 1)
+          test -f site/sitemap.xml       || (echo "::error::site/sitemap.xml missing"       && exit 1)
+          test -f site/search/search_index.json || (echo "::error::site/search/search_index.json missing" && exit 1)
+          test -f site/objects.inv       || (echo "::error::site/objects.inv missing"       && exit 1)
+          echo "Site directory:"
+          ls -la site/
+          echo "HTML pages: $(find site -name '*.html' | wc -l)"
+          echo "Search index: $(wc -c < site/search/search_index.json) bytes"
+
+      - name: Upload site as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mkdocs-site-${{ matrix.python-version }}
+          path: website/site/
+          if-no-files-found: error
+          retention-days: 14
