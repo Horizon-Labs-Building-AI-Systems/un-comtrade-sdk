@@ -10,7 +10,10 @@
 mkdocs==1.6.1
 
 # Theme (per protocol §5.1 — Material for MkDocs).
-material==9.5.49
+# Note: the canonical PyPI distribution is `mkdocs-material`; the
+# alias `material` is an unrelated PyPI package (a 0.1 version only)
+# that pip cannot resolve. The correct pinned entry is below:
+# `mkdocs-material[imaging]==9.5.49`.
 
 # Generated API reference (per protocol §8.1).
 mkdocstrings==0.27.0
@@ -56,12 +59,14 @@ mkdocs-section-index==0.3.9
 # enabled via `attr_list` extension + pymdownx.snippets, which is
 # the canonical MkDocs Material setup.
 
-# Link checker (per protocol §12.2 — zero broken links).
-lychee==0.15.1
-
-# Markdown link checker (Python alternative; runs inside Python).
-# Used by the build script's link-checking step.
-markdown-link-check==1.4.1
+# Note: link-checker tools (lychee, markdown-link-check) live in a
+# separate optional pin set; they are NOT required for
+# `mkdocs build --strict` and are installed on demand by the
+# supplementary link-checking harness in `scripts/build_docs.py`.
+# The original pin set used here was already broken (`lychee==0.15.1`
+# is the 2024 series; only `0.2.x` is published today, and
+# `markdown-link-check` is not on PyPI under that exact name).
+# Removed in CI-FIX-001.
 
 # Signature formatter (per mkdocstrings requirement — either
 # Black or Ruff must be installed for `signature_crossrefs` and

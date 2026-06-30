@@ -82,7 +82,7 @@ jobs:
           cache-dependency-path: pyproject.toml
 
       - name: Install package + dev dependencies
-        run: pip install -e ".[dev]"
+        run: pip install -e ".[dev,all]"
 
       # CI-005 baseline: the docs-placeholder test
       # `tests/test_documentation_examples.py::test_required_sections_present`
