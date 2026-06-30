@@ -27,4 +27,4 @@ across ``pyproject.toml`` (canonical), this
 classifier.
 """
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
