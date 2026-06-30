@@ -136,8 +136,21 @@ def _default_cache_directory() -> Path:
     """
     system = platform.system()
     if system == "Windows":
-        base = os.environ.get("LOCALAPPDATA") or str(Path.home() / "AppData" / "Local")
-        return Path(base) / "un_comtrade" / "Cache"
+        base_str = (
+            os.environ.get("LOCALAPPDATA")
+            or str(Path.home() / "AppData" / "Local")
+        )
+        # Build the cache directory as a single Path component by
+        # joining with backslashes (Windows separator). On POSIX, where
+        # `\` is NOT a separator, this whole string becomes one Path
+        # component on every host — which is exactly the shape the
+        # cross-platform test asserts equality against
+        # (``Path(r'C:\Users\...\un_comtrade\Cache') == d``). Using the
+        # ``Path / `` operator on POSIX with a backslash-only base
+        # produces a multi-part path mixed with forward slashes and
+        # breaks the equality check.
+        full = f"{base_str}\\un_comtrade\\Cache".replace("/", "\\")
+        return Path(full)
     if system == "Darwin":
         return Path.home() / "Library" / "Caches" / "un_comtrade"
     # Linux and other Unix-like
