@@ -22,10 +22,6 @@ permissions:
   pages: write
   id-token: write
 
-# Avoid leaving stale deployments lingering when a workflow is cancelled.
-concurrency_groups:
-  - pages-${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   build:
     name: Build MkDocs site
