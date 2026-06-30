@@ -127,6 +127,8 @@ jobs:
     #    present and fall back to Trusted Publisher
     #    when `password` is empty and `id-token:
     #    write` is granted.
+    environment:
+      name: pypi
     permissions:
       id-token: write
     steps:
