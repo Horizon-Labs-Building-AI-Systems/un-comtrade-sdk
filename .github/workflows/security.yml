@@ -84,16 +84,13 @@ jobs:
       - name: Run TruffleHog
         uses: trufflesecurity/trufflehog@main
         with:
-          # Let the official action resolve the commit range
-          # automatically from the GitHub event (push,
-          # pull_request, workflow_dispatch, schedule, etc.).
-          # An explicit `base:` + `head:` pair collapses to a
-          # single commit on `push` events targeting the default
-          # branch, which TruffleHog rejects with
-          # ``BASE and HEAD commits are the same``. The
-          # action's automatic detection handles every event
-          # type correctly.
-          extra_args: --results=verified,unknown --fail
+          # The action already passes `--fail` (and
+          # `--since-commit` / `--branch` / `--no-update` /
+          # `--github-actions`) to the TruffleHog CLI itself; do
+          # NOT re-pass `--fail` here, or the CLI errors with
+          # ``flag 'fail' cannot be repeated``. Only pass
+          # extra args the action does NOT already inject.
+          extra_args: --results=verified,unknown
         env:
           # The action's only credential input is GITHUB_TOKEN,
           # which the runner provisions automatically. No API key,
