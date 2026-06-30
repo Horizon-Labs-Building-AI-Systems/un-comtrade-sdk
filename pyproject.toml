@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "un-comtrade-sdk"
-version = "1.0.2"
+version = "1.0.3"
 description = "Python SDK for the UN Comtrade (UNSD) trade statistics API"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -72,7 +72,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk"
-Documentation = "https://un-comtrade-sdk.readthedocs.io/"
+Documentation = "https://horizon-labs-building-ai-systems.github.io/un-comtrade-sdk/"
 Repository = "https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk"
 Issues = "https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/issues"
 Changelog = "https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/blob/main/docs/CHANGELOG.md"

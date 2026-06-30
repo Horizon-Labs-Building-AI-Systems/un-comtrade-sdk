@@ -103,3 +103,10 @@ htmlcov/
 # Build artifacts
 build/
 *.egg-info/
+
+# Local development artifacts (public-readiness hygiene)
+website/site/
+website/.mkdocs-serve.log
+.audit/
+dist-check/
+_tmp_log.py
