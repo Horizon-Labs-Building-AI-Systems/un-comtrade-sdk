@@ -1,7 +1,7 @@
 # un-comtrade-sdk
 
-[![TestPyPI](https://img.shields.io/pypi/v/un-comtrade-sdk.svg?pypiBaseUrl=https%3A%2F%2Ftest.pypi.org&label=testpypi&color=blue)](https://test.pypi.org/project/un-comtrade-sdk/)
-[![Python](https://img.shields.io/pypi/pyversions/un-comtrade-sdk.svg?pypiBaseUrl=https%3A%2F%2Ftest.pypi.org&label=python)](https://test.pypi.org/project/un-comtrade-sdk/#files)
+[![PyPI](https://img.shields.io/pypi/v/un-comtrade-sdk.svg)](https://pypi.org/project/un-comtrade-sdk/)
+[![Python](https://img.shields.io/pypi/pyversions/un-comtrade-sdk.svg)](https://pypi.org/project/un-comtrade-sdk/#files)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
 Production-ready Python SDK for the UN Comtrade (UNSD) trade statistics API.
@@ -9,9 +9,9 @@ Typed. Documented. Tested. Validated on every push to `main`.
 
 ## Status
 
-The latest development release is published on **TestPyPI**. The same source
-builds cleanly on every push; CI is the gate. Production PyPI mirrors the
-release once a stable cut is tagged.
+The latest stable release is published on **[PyPI](https://pypi.org/project/un-comtrade-sdk/)**.
+The same source builds cleanly on every push; CI is the gate. Releases are
+driven by git tags (`v*.*.*`) on `main`.
 
 | Quality gate | What it proves | Last run on `main` |
 | --- | --- | --- |
@@ -19,15 +19,12 @@ release once a stable cut is tagged.
 | [Documentation](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/docs.yml) | `mkdocs build --strict` | passing |
 | [Package](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/package.yml) | `python -m build` (wheel + sdist), `twine check` | passing |
 | [Security](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/security.yml) | TruffleHog secret scan, `pip-audit` across Python 3.11–3.13 | passing |
-| [Release](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/release.yml) | tag-driven TestPyPI publication | passing |
+| [Release](https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/actions/workflows/release.yml) | tag-driven PyPI publication (TestPyPI + production) | passing |
 
 ## Install
 
 ```bash
-pip install \
-  --index-url https://test.pypi.org/simple \
-  --extra-index-url https://pypi.org/simple \
-  un-comtrade-sdk
+pip install un-comtrade-sdk
 ```
 
 Check the import:
@@ -98,7 +95,7 @@ un-comtrade metadata countries
 | Issues | https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/issues |
 | Changelog | https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/blob/main/docs/CHANGELOG.md |
 | Release notes (v1.x series) | https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk/blob/main/docs/032_v1_RELEASE_NOTES.md |
-| TestPyPI index | https://test.pypi.org/project/un-comtrade-sdk/ |
+| PyPI index | https://pypi.org/project/un-comtrade-sdk/ |
 | Documentation site | https://horizon-labs-building-ai-systems.github.io/un-comtrade-sdk/ |
 
 ## License
