@@ -69,23 +69,28 @@ jobs:
         run: rm -rf .ci-audit-venv .ci-audit-reqs.txt
 
   secrets:
-    name: gitleaks secret scan
+    name: TruffleHog secret scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Full history so gitleaks can scan every commit,
-          # not just the latest push. Shallow clones miss
-          # secrets introduced and then "fixed" in earlier
-          # commits.
+          # Full history so TruffleHog can diff every commit
+          # between the default branch and the current HEAD.
+          # Shallow clones miss secrets introduced and then
+          # "fixed" in earlier commits.
           fetch-depth: 0
 
-      - name: Run gitleaks
-        uses: gitleaks/gitleaks-action@v2
+      - name: Run TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          # Compare default branch → current HEAD, per CI-SEC-001.
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          # Fail the workflow if any secret is detected.
+          extra_args: --results=verified,unknown --fail
         env:
-          # GITHUB_TOKEN is required so gitleaks-action can
-          # upload its SARIF report to the Security tab on
-          # failures. The token is provisioned by the runner;
-          # no manual secret wiring is required.
+          # The action's only credential input is GITHUB_TOKEN,
+          # which the runner provisions automatically. No API key,
+          # no TruffleHog Cloud account, no commercial licence.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
