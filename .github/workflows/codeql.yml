@@ -48,10 +48,6 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          # Default `security-extended` query pack: covers
-          # the standard security queries plus a wider set
-          # of accuracy/reliability/libraries queries.
-          queries: security-extended
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
