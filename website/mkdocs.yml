@@ -6,7 +6,9 @@
 
 site_name: un-comtrade-sdk
 site_description: A Pythonic client for the UN Comtrade API.
-site_url: https://docs.uncomtrade.org/
+site_url: https://horizon-labs-building-ai-systems.github.io/un-comtrade-sdk/
+# MkDocs default is use_directory_urls: true (already enabled); explicit for clarity.
+use_directory_urls: true
 
 repo_url: https://github.com/Horizon-Labs-Building-AI-Systems/un-comtrade-sdk
 repo_name: Horizon-Labs-Building-AI-Systems/un-comtrade-sdk

@@ -1,0 +1,75 @@
+# GitHub Pages deployment for the un-comtrade-sdk MkDocs site.
+# Uses only first-party GitHub Actions (actions/checkout, actions/setup-python,
+# actions/configure-pages, actions/upload-pages-artifact, actions/deploy-pages).
+# See https://docs.github.com/en/pages/quickstart and
+# https://github.com/actions/deploy-pages.
+
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel any in-flight run on the same ref; queue the latest.
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Restrict token scope to the minimum the workflow needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Avoid leaving stale deployments lingering when a workflow is cancelled.
+concurrency_groups:
+  - pages-${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  build:
+    name: Build MkDocs site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: website/requirements-docs.txt
+
+      - name: Install MkDocs + Material theme + plugins
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r website/requirements-docs.txt
+
+      - name: Build the documentation site
+        working-directory: website
+        run: |
+          python -m mkdocs build --strict
+
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
