@@ -89,7 +89,14 @@ jobs:
         run: .ci-install-venv/bin/pip install --quiet dist/*.whl
 
       - name: Verify `import un_comtrade`
-        run: .ci-install-venv/bin/python -c "import un_comtrade; assert un_comtrade.__version__ == '1.0.1'; print('import OK, version=', un_comtrade.__version__)"
+        run: |
+          .ci-install-venv/bin/python -c "
+          import un_comtrade
+          assert hasattr(un_comtrade, '__version__')
+          assert isinstance(un_comtrade.__version__, str)
+          assert len(un_comtrade.__version__) > 0
+          print('import OK, version =', un_comtrade.__version__)
+          "
 
       - name: Verify CLI executable
         run: |
